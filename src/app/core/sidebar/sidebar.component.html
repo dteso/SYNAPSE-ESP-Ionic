@@ -1,0 +1,25 @@
+<ion-menu contentId="main-content" type="overlay">
+  <ion-content>
+    <img src="../../../assets/PNG-NEW-LOGO_HORIZONTAL-SMSENSORIAL_26282c.webp" style="padding: 2rem; margin-top: 10%;">
+    <ion-list id="inbox-list">
+      <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+        <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+          <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+          <ion-label>{{ p.title }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+    <div style="color: black; text-align: center; font-size: larger; padding-top: 3rem;">http://www.smsensorial.com
+    </div>
+    <div style="color: rgb(5, 110, 110); font-size: small; text-align: center; "><strong>SmSensorial
+        MONITOR
+      </strong>v1.0.0 (2022)
+    </div>
+    <div style="color: #223240;font-size: small; font-weight: bolder ;text-align: center; ">
+      <strong>dtesodev@gmail.com</strong>
+    </div>
+    <div style="text-align: center;">
+      <a href="https://lordicon.com/">Animated icons by Lordicon.com</a>
+    </div>
+  </ion-content>
+</ion-menu>

@@ -1,0 +1,71 @@
+ion-content {
+  --background: -webkit-linear-gradient(-90deg, #223240 50%, gray 100%);
+}
+
+.terminal-input {
+  background: black;
+  color: cyan;
+  border-radius: 2%;
+}
+
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+.socket-client-header {
+  background: -webkit-linear-gradient(-90deg, #223240 40%, rgb(85, 96, 113) 100%);
+  margin-top: 3.5rem;
+  color: #FFFFFF;
+}
+
+.text-black {
+  color: black;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.log {
+  color: black;
+  margin-bottom: 0.1rem;
+  padding: 0.5rem;
+  border-bottom: solid 0.5px #FFFFFF;
+  border-radius: 0.5%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.custom-shadowed-text {
+  color: #FFFFFF;
+  text-shadow: 2px 2px 4px #1c010d;
+}

@@ -1,0 +1,16 @@
+<app-sidebar></app-sidebar>
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-title style="text-align: center;">
+    <!-- <img src="../../../assets/logo_dark_blue.png" style="font-size: 1rem;" height="35vh"> -->
+    SYNAPSE
+  </ion-title>
+  <ion-buttons slot="end">
+    <img *ngIf="!isHomePage()" src="../assets/icons/lordicon-home.apng" width="35rem" height="35rem" alt=""
+      routerLink="/home">
+    <ion-icon *ngIf="isHomePage()" name="exit-outline" color="danger" style="font-size: 2rem;" (click)="logout()">
+    </ion-icon>
+  </ion-buttons>
+</ion-toolbar>

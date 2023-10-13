@@ -1,0 +1,114 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>{{ isAdding? 'Nuevo cliente':'Modificar cliente'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss(null)">
+        <ion-icon name="close-circle" color="danger" style="font-size: 1.8rem;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div style="margin-top: 1rem; padding: 1.2rem;">
+    <ion-row>
+      <ion-col size="12">
+        <form *ngIf="clientForm" [formGroup]="clientForm">
+          <div>
+            <p style="padding-left: 1rem;">
+              <ion-icon name="home" style="font-size: 1.2rem; margin-right: 0.125rem;">
+              </ion-icon><strong>CLIENTE</strong>
+            </p>
+
+            <ion-row style="margin-top: 0.5rem; padding-top: 0; border-top: 0.125rem solid #FFFFFF; padding: 1.5rem;">
+              <ion-label>
+                <h2 style="font-size: 0.8rem; font-weight: bolder;"> Nombre </h2>
+              </ion-label>
+              <ion-col size="12" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="text" formControlName="name" placeholder=""></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <p style="padding-left: 1rem;">
+              <ion-icon name="location-outline" style="font-size: 1.2rem; margin-right: 0.125rem;">
+              </ion-icon><strong>UBICACIÓN</strong>
+            </p>
+            <ion-row style="margin-top: 0.5rem; padding-top: 0; border-top: 0.125rem solid #FFFFFF; padding: 1.5rem;">
+              <ion-label style="margin-bottom: 0;">
+                <h2 style="font-size: 0.8rem; font-weight: bolder;"> Provincia </h2>
+              </ion-label>
+              <ion-col size="12" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="text" formControlName="province" placeholder=""></ion-input>
+              </ion-col>
+
+              <ion-label>
+                <h2 style="font-size: 0.8rem; font-weight: bolder; margin-top: 0.5rem;"> Localidad </h2>
+              </ion-label>
+              <ion-col size="12" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="text" formControlName="location" placeholder=""></ion-input>
+              </ion-col>
+
+              <ion-label>
+                <h2 style="font-size: 0.8rem; font-weight: bolder; margin-top: 0.5rem;"> Dirección </h2>
+              </ion-label>
+              <ion-col size="12" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="text" formControlName="street" placeholder=""></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <p style="padding-left: 1rem;">
+              <ion-icon name="person" style="font-size: 1.2rem; margin-right: 0.125rem;">
+              </ion-icon><strong>DATOS DE CONTACTO</strong>
+            </p>
+            <ion-row style="margin-top: 0.5rem; padding-top: 0; border-top: 0.125rem solid #FFFFFF; padding: 1.5rem;">
+              <ion-label>
+                <h2 style="font-size: 0.8rem; font-weight: bolder;"> Contacto </h2>
+              </ion-label>
+              <ion-col size="12" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="text" formControlName="contactName" placeholder=""></ion-input>
+              </ion-col>
+
+
+              <ion-col size="2" style="margin-top: 1rem;">
+                <ion-label>
+                  <ion-icon name="call-outline" style="font-size: 2rem; margin-right: 0.125rem;">
+                  </ion-icon>
+                </ion-label>
+              </ion-col>
+              <ion-col size="10" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="number" formControlName="telephone" placeholder=""></ion-input>
+              </ion-col>
+
+              <ion-col size="2" style="margin-top: 1rem;">
+                <ion-label>
+                  <ion-icon name="mail-outline" style="font-size: 2rem; margin-right: 0.125rem;">
+                  </ion-icon>
+                </ion-label>
+              </ion-col>
+              <ion-col size="10" style="border-bottom: solid 0.5px #FFFFFF;">
+                <ion-input type="email" formControlName="email" placeholder=""></ion-input>
+              </ion-col>
+            </ion-row>
+
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+
+
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div style="padding: 1rem;">
+    <ion-row>
+      <ion-col size="6">
+        <!-- <ion-button type="submit" expand="full" shape="round" color="danger" style="width: 65%;">
+          VOLVER</ion-button> -->
+      </ion-col>
+      <ion-col size="6" style="justify-content: right; display: flex;">
+        <ion-button type="submit" expand="full" shape="round" style="width: 65%;" (click)="save()">
+          REGISTRAR</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-footer>

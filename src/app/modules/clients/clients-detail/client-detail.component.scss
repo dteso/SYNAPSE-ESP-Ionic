@@ -1,0 +1,69 @@
+ion-content {
+    --background: -webkit-linear-gradient(-90deg, #223240 80%, gray 100%);
+}
+
+ion-segment-button::part(indicator-background) {
+    background: #FFFFFF;
+    color: #FFFFFF;
+}
+
+.segment-button-checked.md::part(native) {
+    color: #FFFFFF;
+    font-weight: bolder;
+}
+
+ion-segment {
+    --background: #223240;
+}
+
+ion-segment-button {
+    font-size: 0.7rem;
+}
+
+/* Material Design styles */
+ion-segment-button.md::part(native) {
+    color: rgb(136, 128, 128);
+    font-weight: bolder;
+}
+
+
+
+.ok-background {
+    background: -webkit-linear-gradient(0deg, transparent 70%, rgb(2, 188, 141) 100%);
+}
+
+.ko-background {
+    background: -webkit-linear-gradient(0deg, transparent 70%, rgb(233, 103, 103) 100%);
+}
+
+.quarentine-background {
+    background: -webkit-linear-gradient(0deg, transparent 70%, rgb(230, 251, 5) 100%);
+}
+
+.maintenance-background {
+    background: -webkit-linear-gradient(0deg, transparent 70%, rgb(195, 113, 227) 100%);
+}
+
+.not-connected-background {
+    background: -webkit-linear-gradient(0deg, transparent 70%, black 100%);
+}
+
+.bypassed-background {
+    background: -webkit-linear-gradient(0deg, transparent 70%, rgb(102, 100, 100) 100%);
+    color: gray;
+}
+
+
+.devices-header {
+    background: -webkit-linear-gradient(-90deg, #223240 40%, rgb(85, 96, 113) 100%);
+    margin-top: 3.5rem;
+    color: #FFFFFF;
+}
+
+p {
+    font-size: 12px;
+}
+
+h1 {
+    font-weight: bolder;
+}

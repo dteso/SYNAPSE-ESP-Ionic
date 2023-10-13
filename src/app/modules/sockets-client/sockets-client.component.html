@@ -1,0 +1,43 @@
+<div class="socket-client-header text-center">
+  <ion-row>
+    <ion-col size='12' class="connected-frame">
+      <h1 class="custom-shadowed-text">WebSockets Log</h1>
+      <h6> {{ socketServerUrl }} </h6>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-row>
+        <ion-col size='10'>
+          <ion-input [(ngModel)]="message" id="inputMessage" type="text" name="message" class="terminal-input">
+          </ion-input>
+        </ion-col>
+        <ion-col size='2'>
+          <ion-button expand="block" color="primary" type="submit" size='medium' (click)="sendMessage()">
+            <ion-icon name="arrow-redo-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</div>
+<ion-content>
+  <ion-row *ngIf="fullStream | async else notDataBlock" class="fade-in">
+    <ion-col size='12'>
+      <div #terminal class="overflow-scroll">
+        <ion-textarea>
+          <p *ngFor="let message of fullStream | async" style="font-size: 0.9rem;" class="log fade-in"> <strong
+              style="color: rgb(4, 202, 202);"> {{message.date | date : 'HH:mm:ss'}}</strong> -
+            <strong>{{message.event}}</strong> {{message.data | json}}
+          </p>
+        </ion-textarea>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ng-template #notDataBlock>
+    <div style="text-align: center; padding-top: 40%;">
+      No data received by the moment...
+    </div>
+  </ng-template>
+</ion-content>

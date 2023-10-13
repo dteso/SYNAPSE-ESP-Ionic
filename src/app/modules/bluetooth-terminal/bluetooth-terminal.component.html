@@ -1,0 +1,125 @@
+<div *ngIf="terminalFormReady" class="bg-seagreen fade-in">
+  <!-- When connected -->
+  <ion-row *ngIf="connected" class="fade-in" style="margin-top: 4rem; color: #16a9c7; text-align: center; ">
+    <div style="width: 100%; text-align: right;  background-color: #19252f; padding: 0.1rem;">
+      <ion-row>
+        <ion-col size="10" style="text-align: left; padding-top: 0.8rem;">
+          <strong>BLUETOOTH CONNECTED</strong>
+        </ion-col>
+        <ion-col size="2">
+          <ion-icon *ngIf="headerVisible" name='remove-circle' color="secondary" style="font-size: 2rem;"
+            (click)="collapseHeader()"></ion-icon>
+          <ion-icon *ngIf="!headerVisible" name='add-circle' color="secondary" style="font-size: 2rem;"
+            (click)="collapseHeader()"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-col *ngIf="headerVisible" size="12">
+      <div style="width: 100%;">
+        <img width="30%" src="../../../assets/icons/466-bluetooth-outline.apng" />
+      </div>
+      <p style="color: black; font-size: 14px;">
+        <strong>{{currentDevice.name}}</strong> {{currentDevice.address}}
+      </p>
+    </ion-col>
+  </ion-row>
+
+  <!-- Toolbar -->
+  <ion-row *ngIf="connected" style="text-align: center; margin-top: 1rem;">
+    <ion-col (click)="presentModal()">
+      <img width="60%" src="../../../assets/icons/enter-key-gradient.apng" />
+    </ion-col>
+    <ion-col (click)="clearConsole();">
+      <img width="60%" src="../../../assets/icons/windscreen-gradient.apng" />
+    </ion-col>
+    <ion-col (click)="startSpeechRecognition()">
+      <img width="60%" src="../../../assets/icons/microphone-recording-gradient.apng" />
+    </ion-col>
+    <ion-col (click)="disconnect()">
+      <img width="60%" src="../../../assets/icons/link-unlink-morph-gradient.apng" />
+    </ion-col>
+  </ion-row>
+
+  <!-- Data sending form -->
+  <ion-row *ngIf="connected" style="background-color: #19252f;">
+    <ion-col>
+      <form [formGroup]="terminalForm" (ngSubmit)="onSubmit()">
+        <ion-row>
+          <ion-col size='10'>
+            <ion-input type="text" formControlName="message" name="message" class="terminal-input"></ion-input>
+          </ion-col>
+          <ion-col size='2'>
+            <ion-button expand="block" color="primary" type="submit" style="background-color: transparent;">
+              <ion-icon name="arrow-redo-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-col>
+  </ion-row>
+</div>
+
+<ion-content [fullscreen]="true" class="text-black fade-in">
+
+  <!-- Stored bluetooth devices list-->
+  <ion-row *ngIf="bluetoothDevices[0] && !connected" class="fade-in" style="margin-top: 2rem;">
+    <ion-col size='12'>
+      <h4 style="text-align: center; padding-bottom: 0.5rem; padding-top: 2rem;">Selecciona un dispositivo</h4>
+      <p style="font-size: 12px; text-align: center;">El dispositvo que intentas conectar seguramente será HC-05. Si no
+        lo encuentras
+        deberás
+        parearlo primero.</p>
+      <div *ngIf="!connected" class="p1">
+        <ion-button expand="block" (click)="openNativeBluettothSettings()">Parear nuevo dispositivo</ion-button>
+      </div>
+      <div #terminal class="overflow-scroll">
+        <div *ngFor="let device of bluetoothDevices[0]" class="stored-device"
+          (click)="connectToDevice(device.name, device.address)">
+          <strong style="color: black;">{{ device.name }}</strong> {{device.address}} <ion-icon name="star"
+            *ngIf="device.name==='HC-05'" style="color: #FFFFFF; font-size: 1.2rem;"></ion-icon>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <!-- Log -->
+  <ion-row *ngIf="rawDataSubject | async else notDataBlock" class="fadeInDown">
+    <ion-col size='12'>
+      <div #terminal class="overflow-scroll">
+        <ion-textarea>
+          <div *ngFor="let data of rawDataSubject | async"
+            [ngStyle]="{'background': data.type === 'RECEIVED' ? '#19252f' : (data.type === 'SENT' ? 'orange' : null) }"
+            class="log fadeInDown">
+            <!-- <h1>{{data.id}}</h1> -->
+            <ion-row>
+              <ion-col>
+                <p *ngIf="data.type === messageTypes.RECEIVED else elseBlock" style="color: cyan;">
+                  {{data.type}}
+                  <ion-icon name="arrow-undo-outline" class="fs1rem">
+                  </ion-icon>
+                <p>
+                  <ng-template #elseBlock>
+                    <p>
+                      <ion-icon name="arrow-redo-outline" class="fs1rem"></ion-icon>{{data.type}}
+                    </p>
+                  </ng-template>
+              </ion-col>
+              <ion-col size='4' class="text-right" style="color:cyan; margin-top: 1rem;">
+                {{data.timestamp | date : 'HH:mm:ss' }}"
+              </ion-col>
+            </ion-row>
+
+            {{data.content}}
+
+          </div>
+        </ion-textarea>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ng-template #notDataBlock>
+    <div *ngIf="connected" style="text-align: center; padding-top: 40%;">
+      No data received by the moment...
+    </div>
+  </ng-template>
+  <!-- MESSAGE_TRAFFIC_COUNT: {{idx}} -->
+</ion-content>

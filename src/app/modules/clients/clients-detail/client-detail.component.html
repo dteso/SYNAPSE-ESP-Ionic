@@ -1,0 +1,136 @@
+<div class="devices-header text-center">
+  <ion-row style="background:#1b2732">
+    <ion-col size="2" style="padding-top: 1.5rem;">
+      <ion-icon name="arrow-back" style="font-size: 2rem;" routerLink="/customers"></ion-icon>
+    </ion-col>
+    <ion-col size='8' class="connected-frame">
+      <h1 class="custom-shadowed-text">{{ client?.name }}</h1>
+    </ion-col>
+    <ion-col size="2" routerLink="/customers" style="padding-top: 1rem;">
+      <img width="90%" src="../../../../assets/icons/avatar-man-gradient.apng" />
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-card style="width: 100%; background-color:#151c25;">
+      <ion-card-title style="padding: 0.5rem;">
+        <ion-row>
+          <ion-col size="12" style="text-align: center; color:lightgray; ">
+            <strong>{{client?.location}}</strong>
+          </ion-col>
+        </ion-row>
+      </ion-card-title>
+      <ion-card-subtitle>
+        <ion-row>
+          <ion-col size="12" style="text-align: center; color:lightgray; ">
+            {{client?.street}}
+          </ion-col>
+        </ion-row>
+      </ion-card-subtitle>
+      <ion-card-content>
+        <!-- Opciones de cliente -->
+        <ion-row>
+          <ion-col size="3">
+            <ion-button expand="full" color="default" (click)="openEditionModal(client, client.uid)">
+              <img src="../../../../assets/icons/edit-document-outline.apng" style="padding: 0.250rem;" />
+            </ion-button>
+            <p>EDITAR</p>
+          </ion-col>
+          <ion-col size="3">
+            <ion-button expand="full" color="default" (click)="presentNotAvailableModal()">
+              <img src="../../../../assets/icons/calendar-outline.apng" style="padding: 0.250rem;" />
+            </ion-button>
+            <p>CITAS</p>
+          </ion-col>
+          <ion-col size="3">
+            <ion-button expand="full" color="default">
+              <a href="mailto:{{client?.email}}">
+                <img width="80%" src="../../../../assets/icons/email-solid.apng" />
+              </a>
+            </ion-button>
+            <p>{{client?.email}}</p>
+          </ion-col>
+          <ion-col size="3">
+            <ion-button expand="full" color="default">
+              <a href="tel:+34{{client?.telephone}}}" style="color: rgb(8, 208, 141);">
+                <img width="80%" src="../../../../assets/icons/call-phone-outline.apng" />
+              </a>
+            </ion-button>
+            <p>{{client?.telephone}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-row>
+  <ion-row>
+    <ion-segment value="devices" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="devices">
+        <ion-label>Nebulizad.</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="managements">
+        <ion-label>Revisiones</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="events">
+        <ion-label> Eventos </ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-row>
+</div>
+<ion-content>
+
+  <!-- 1. NEBULIZADORES -->
+  <div *ngIf="showDevices | async" style="padding: 0.5rem; margin-top: 1rem;" class="fade-in">
+    <ion-row style="color:#FFFFFF ; border-bottom: solid 3px #FFFFFF; padding: 0.2rem; margin-bottom: 0.2rem;">
+      <ion-col size="4"><strong>Nombre</strong></ion-col>
+      <ion-col size="6" style="text-align: left;"><strong>MAC</strong></ion-col>
+      <ion-col size="2" style="text-align: end;"><strong>Estado</strong></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let device of devices" class="fade-in" [ngClass]="{'quarentine-background':device.mode && device.mode === 'Q',
+    'maintenance-background':device.mode && device.mode === 'M',
+    'bypassed-background':device.mode && device.mode === 'B',
+    'ko-background':device.minLevelReached === 'YES',
+    'ok-background':device.minLevelReached === 'NO',
+    'not-connected-background':device.minLevelReached===''}"
+      style="border-bottom: solid 0.1px #FFFFFF; padding: 0.2rem;" (press)="showDeviceDetails(device)"
+      (click)="showDeviceDetails(device)">
+      <ion-col size="4">{{device.name}}</ion-col>
+      <ion-col size="6" style="text-align: left;">{{device.MAC}}</ion-col>
+      <ion-col size="2" style="text-align: end;">
+        <ion-icon class="small" *ngIf="device.mode && device.mode === 'B'" name="mic-off" style="color: black;">
+        </ion-icon>
+        <ion-icon class="small"
+          *ngIf="device.minLevelReached === 'YES' && (!device.mode || (device.mode && device.mode !== 'B'))"
+          name="warning" style="color: black;">
+        </ion-icon>
+        <ion-icon class="small"
+          *ngIf="device.minLevelReached === 'NO' && (!device.mode || (device.mode && device.mode !== 'B'))"
+          name="checkmark" style="color: black;">
+        </ion-icon>
+        <ion-spinner *ngIf="device.minLevelReached === '' && (!device.mode || (device.mode && device.mode !== 'B'))"
+          color="medium" name="crescent"></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="!devices" style="text-align: center; padding: 3rem;">
+      No se han recibido datos por el momento
+    </div>
+  </div>
+
+  <!-- 2. HISTÓRICO REVISIONES -->
+  <div *ngIf="showManagements | async" style="padding: 0.5rem;" class="fade-in">
+    <ion-row style="padding-top:1rem; color: gray;">
+      <p style="text-align: center !important; width: 100%; font-size: 1rem;">Sin visitas registradas por el momento</p>
+    </ion-row>
+  </div>
+
+  <!--3.  HISTÓRICO EVENTOS -->
+  <div *ngIf="showEvents | async" style="padding: 0.5rem;" class="fade-in">
+    <ion-row style="padding-top:1rem; color: gray;">
+      <p style="text-align: center !important; width: 100%; font-size: 1rem;">Sin eventos registradas por el momento</p>
+    </ion-row>
+  </div>
+</ion-content>
+
+<ion-footer style="text-align: center;">
+  <ion-button color="danger" expand="full" (click)="verifyClientForDelete()">
+    <ion-icon name="trash"></ion-icon> Borrar Cliente
+  </ion-button>
+</ion-footer>

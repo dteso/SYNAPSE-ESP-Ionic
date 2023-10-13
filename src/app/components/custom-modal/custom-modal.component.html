@@ -1,0 +1,26 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title><strong>{{ title }}</strong></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss(null)">
+        <ion-icon name="close-circle" color="danger" style="font-size: 1.8rem;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [style]="getModalStyle()">
+  <br>
+  <img *ngIf="showImage()" [src]="icon.url" width="25%" />
+  <div [style]="getContentColor()" class="animated pulse">
+    {{ getMessage() }}
+  </div>
+</ion-content>
+<ion-footer *ngIf="buttons">
+  <ion-row style="padding: 1rem;">
+    <ion-col *ngFor="let button of buttons;">
+      <ion-button [style]='getButtonStyle(button)' (click)="setOnclosePayload(button.value)" expand="full">
+        {{ button.caption }}
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

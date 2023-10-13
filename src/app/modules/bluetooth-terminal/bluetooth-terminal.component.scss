@@ -1,0 +1,131 @@
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+
+
+.connected-frame {
+  color: black(29, 180, 226);
+  text-align: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  padding-bottom: 1rem;
+}
+
+.bg-seagreen {
+  background: -webkit-linear-gradient(-90deg, #223240 70%, rgb(209, 206, 206) 100%);
+}
+
+.black-shadowed-text {
+  text-shadow: 2px 2px 4px #FFFFFF;
+}
+
+.center-shadow-box {
+  text-align: center;
+  box-shadow: 3px 3px 3px black;
+}
+
+.lbl-h4 {
+  background: transparent;
+  height: 4rem;
+}
+
+.p1 {
+  padding: 1rem;
+}
+
+.stored-device {
+  color: rgb(0, 183, 255);
+  border-bottom: 1px solid #FFFFFF;
+  padding: 1rem;
+}
+
+.log {
+  color: black;
+  font-size: 14px;
+  margin-bottom: 0.3rem;
+  padding-bottom: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  border-radius: 5px;
+  border-bottom: solid 1px #FFFFFF;
+  border-left: solid 1px #FFFFFF;
+  border-right: solid 1px #c9d1d8;
+  border-top: solid 1px #c9d1d8;
+  box-shadow: 2px 2px 2px 2px #223240;
+}
+
+.fs1rem {
+  font-size: 1rem;
+}
+
+.fs3px {
+  font-size: 3px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.terminal-input {
+  background: transparent;
+  color: #FFFFFF;
+  font-weight: bolder;
+  border-bottom: 1px solid rgb(40, 130, 146);
+  border-radius: 1%;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+  padding: 0.2rem;
+}
+
+.text-black {
+  color: black;
+}
+
+.text-black {
+  color: blacksmoke;
+}
+
+.my-custom-class {
+  --background: #222;
+}
+
+ion-content {
+  --background: -webkit-linear-gradient(-90deg, #223240 70%, rgb(149, 145, 145) 100%);
+}
+
+
+ion-row {
+  --background: rgb(47, 47, 51);
+}
+
+ion-footer {
+  background-color: #223240;
+  --background: #223240 !important;
+  color: #FFFFFF !important;
+}

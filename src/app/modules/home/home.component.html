@@ -1,0 +1,128 @@
+<div class="text-center" style="padding-top: 3rem;">
+  <ion-row style="padding: 1rem; background-color: #FFFFFF; border-bottom: #065050 solid 1px; padding-bottom: 2rem;">
+    <ion-col size="3">
+      <ion-button expand="full" color="default" routerLink="/devices">
+        <!-- <ion-icon name="rose"></ion-icon> -->
+        <img src="../../../assets/icons/lordicons-rose.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>DEVICES</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" routerLink="/customers">
+        <!-- <ion-icon name="person"></ion-icon> -->
+        <img src="../../../assets/icons/avatar-man-gradient.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>SYSTEMS</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" (click)="presentNotAvailableModal()">
+        <!-- <ion-icon name="cog"></ion-icon> -->
+        <img src="../../../assets/icons/lordicons-server.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>SETUP</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" routerLink="/sockets-client">
+        <!-- <ion-icon name="trash"></ion-icon> -->
+        <img src="../../../assets/icons/lordicons-globe.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>NETWORK</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" routerLink="/bluetooth-terminal">
+        <!-- <ion-icon name="bluetooth"></ion-icon> -->
+        <img src="../../../assets/icons/lordicon-bluetooth.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>BLUETOOTH</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" routerLink="/serial-terminal">
+        <!-- <ion-icon name="terminal"></ion-icon> -->
+        <img src="../../../assets/icons/lordicons-usb.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>USB</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" (click)="presentNotAvailableModal()">
+        <!-- <ion-icon name="build"></ion-icon> -->
+        <img src="../../../assets/icons/lordicons-tool.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>MAINETENANCE</p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-button expand="full" color="default" (click)="presentNotAvailableModal()">
+        <!-- <ion-icon name="hardware-chip"></ion-icon> -->
+        <img src="../../../assets/icons/lordicons-help.apng" style="padding: 0.250rem;" />
+      </ion-button>
+      <p>HELP</p>
+    </ion-col>
+  </ion-row>
+</div>
+
+<ion-row>
+  <ion-segment value="notRead" (ionChange)="onSegmentChange($event)">
+    <ion-segment-button value="notRead">
+      <ion-label>New ({{ notReadMessages.length }})</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="alreadyRead">
+      <ion-label>Read ({{ readMessages.length}})</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-row>
+
+<ion-content>
+  <ion-fab *ngIf="inSelectionMode" class="fadeInUp" slot="fixed" vertical="top" horizontal="end" [edge]="false">
+    <ion-fab-button color="light">
+      <ion-icon name="chevron-down-circle" style="font-size: 3rem; color: #FFFFFF"
+        (click)="setSelectedDeviceFromNotification()"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+      <ion-fab-button data-desc="Marcar como leídos" style="color: rgb(102, 215, 100);" (click)="markSelectedsAsRead()">
+        <ion-icon name="checkmark" color="success"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button data-desc="Ver nebulizador" style="color: rgb(44, 189, 189);" (click)="presentDeviceEditModal()"
+        *ngIf="selectedNotifications.length === 1">
+        <ion-icon name="rose" color="secondary"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button data-desc="Ver cliente" style="color: rgb(137, 74, 137);"
+        (click)="navigateClient(selectedDevice.customer._id)" *ngIf="selectedNotifications.length === 1">
+        <ion-icon name="person" color="tertiary"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+  <div *ngIf="showNews | async">
+    <!-- Notificaciones nuevas -->
+    <ion-card *ngFor="let notification of _notReadMessages | async"
+      [ngClass]="{'animation-shake':inSelectionMode === true && !notification.isSelected, 'selected':notification.isSelected }"
+      (press)="onPress(notification)" (click)="onClick(notification)">
+      <ion-card-header>
+        <ion-card-title>{{notification.head}}</ion-card-title>
+        <ion-card-subtitle>{{ notification.timestamp |
+          date:'dd/MM/yyyy HH:mm:ss':'GMT+1' }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content class="col" size="12" style="text-align: left;">{{notification.content}}</ion-card-content>
+    </ion-card>
+    <div *ngIf="!notReadMessages.length" style="text-align: center;">
+      <p style="font-size: 20px;">No tienes eventos pendientes</p>
+      <img src="../../../assets/icons/dandelion-gradiente.apng" />
+    </div>
+  </div>
+
+  <!-- Notificaciones leídas -->
+  <div *ngIf="showRead | async">
+    <ion-card *ngFor="let notification of _readMessages | async"
+      [ngClass]="{'animation-shake':inSelectionMode === true && !notification.isSelected, 'selected':notification.isSelected }"
+      (press)="onPress(notification)" (click)="onClick(notification)">
+      <ion-card-header>
+        <ion-card-title>{{notification.head}}</ion-card-title>
+        <ion-card-subtitle>{{ notification.timestamp |
+          date:'dd/MM/yyyy HH:mm:ss':'GMT+1' }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content class="col" size="12" style="text-align: left;">{{notification.content}}</ion-card-content>
+    </ion-card>
+    <div *ngIf="!readMessages.length" style="text-align: center;">
+      <p style="font-size: 20px;">No tienes eventos.</p>
+      <img src="../../../assets/icons/dandelion-gradiente.apng" />
+    </div>
+  </div>
+</ion-content>

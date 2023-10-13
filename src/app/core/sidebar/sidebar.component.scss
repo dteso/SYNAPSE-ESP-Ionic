@@ -1,0 +1,29 @@
+ion-content {
+    --background: #FFFFFF !important;
+    opacity: 90%;
+
+    ion-list {
+        --background-color: green;
+    }
+}
+
+ion-item {
+    --background: #223240 !important;
+    color: black;
+    opacity: 100% !important;
+}
+
+ion-list {
+    margin-top: 10%;
+    --background: #223240 !important;
+    color: black;
+}
+
+ion-icon {
+    color: #FFFFFF;
+}
+
+ion-menu-toggle {
+    --background: transparent;
+    color: black;
+}

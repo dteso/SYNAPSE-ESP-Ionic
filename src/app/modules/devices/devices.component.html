@@ -1,0 +1,142 @@
+<div class="devices-header text-center">
+  <ion-row>
+    <ion-col size='12' class="connected-frame">
+      <h1 class="custom-shadowed-text">Devices</h1>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-segment value="list" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="list">
+        <ion-label>List</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="cards">
+        <ion-label>Cards</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-row>
+</div>
+<ion-row>
+  <ion-col size="12" style="font-size: 1.2rem; background-color: #212930;">
+    <ion-input type="search" placeholder="Search..." [(ngModel)]="filtro" (ngModelChange)="filterDevices()">
+      <ion-icon name="search"></ion-icon>
+    </ion-input>
+  </ion-col>
+</ion-row>
+<ion-content>
+
+
+  <!-- LISTADO -->
+  <div *ngIf="showAsList | async" style="padding: 0.2rem;" class="fade-in">
+    <ion-row
+      style="color:#FFFFFF ; border-bottom: solid 1px #FFFFFF; padding: 0.2rem; margin-bottom: 0.2rem; background-color: #1e3b54;">
+      <ion-col class="col"><strong>Name</strong></ion-col>
+      <ion-col class="col" style="text-align: center;"><strong>System</strong></ion-col>
+      <ion-col class="col" style="text-align: end;"><strong>Status</strong></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let device of devices" class="fade-in register-row" [ngClass]="{
+      'quarentine-background':device.mode && device.mode === 'Q',
+      'maintenance-background':device.mode && device.mode === 'M',
+      'bypassed-background':device.mode && device.mode === 'B',
+      'ko-background':device.minLevelReached === 'YES',
+      'ok-background':device.minLevelReached === 'NO',
+      'not-connected-background':device.minLevelReached===''}" (press)="showDeviceActions(device)"
+      (click)="showDeviceDetails(device)">
+      <ion-col class="col">{{device.name}}</ion-col>
+      <ion-col class="col" style="text-align: center;">{{device.customer?.name}}</ion-col>
+      <ion-col class="col" style="text-align: end;">
+        <!-- {{device.mode}} -->
+        <ion-icon *ngIf="device.mode && device.mode === 'Q'" name="nuclear" style="color: #FFFFFF; font-size: 1.5rem;">
+        </ion-icon>
+        <ion-icon *ngIf="device.mode && device.mode === 'M'" name="build" style="color: #FFFFFF; font-size: 1.5rem;">
+        </ion-icon>
+        <ion-icon *ngIf="device.mode && device.mode === 'B'" name="notifications-off"
+          style="color: #FFFFFF; font-size: 1.5rem;">
+        </ion-icon>
+        <ion-icon *ngIf="device.mode && device.mode === 'B'" name="help">
+        </ion-icon>
+        <ion-icon *ngIf="device.minLevelReached === 'YES' && (!device.mode || (device.mode && device.mode !== 'B'))"
+          name="warning" style="color: #FFFFFF; font-size: 1.5rem;">
+        </ion-icon>
+        <ion-icon *ngIf="device.minLevelReached === 'NO' && (!device.mode || (device.mode && device.mode !== 'B'))"
+          name="checkmark" style="color: #FFFFFF; font-size: 1.5rem;">
+        </ion-icon>
+        <ion-spinner *ngIf="device.minLevelReached === '' && (!device.mode || (device.mode && device.mode !== 'B'))"
+          color="medium" name="crescent"></ion-spinner>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="!devices" style="text-align: center; padding: 3rem;">
+      No se han recibido datos por el momento
+    </div>
+  </div>
+  <!-------------------------------->
+
+  <!--! TARJETAS -->
+  <div *ngIf="showAsCards | async" class="fadeInLeft">
+    <ion-card *ngFor="let device of devices;" class="fade-in">
+      <ion-card-header (press)="showDeviceDetails(device)" (click)="showDeviceDetails(device)">
+        <ion-row>
+          <ion-col size="10">
+            <ion-card-title>
+              {{ device.name }}
+            </ion-card-title>
+            <ion-card-subtitle>
+              {{ device.MAC }}
+            </ion-card-subtitle>
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon style="font-size: 2.2rem;" *ngIf="device.minLevelReached === 'YES'" name="warning" color="danger">
+            </ion-icon>
+            <ion-icon style="font-size: 2.2rem;" *ngIf="device.minLevelReached === 'NO'" name="checkmark"
+              color="success">
+            </ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="5" (press)="showDeviceDetails(device)" (click)="showDeviceDetails(device)">
+            <p>IP: {{ device.ip }}</p>
+            <p>RSSI: {{ device.rssi }}</p>
+            <p>ssid: {{ device.ssid }}</p>
+            <p>Temp: {{ device.temp }}ºC</p>
+            <p>Hum: {{ device.hum }}%</p>
+          </ion-col>
+          <ion-col size="7" style="text-align:center; padding:0;">
+            <p>Última revisión: 10/02/2022</p>
+            <br>
+            <p style="color: #FFFFFF;">
+              {{device.customer?.name}}
+            </p>
+            <ion-button color="default"
+              style="min-height: 3rem; width: 80%; border: 1px solid #FFFFFF; background-color: #212930;"
+              (click)="navigateClient(device.customer?._id)">
+              <img width="40%" src="../../../assets/icons/avatar-man-gradient.apng" />
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <!-------------------------------->
+
+  <!-- Añadir dispositivo / Conectar a USB-BT -->
+  <ion-fab class="offline" *ngIf="!bluetoothConnected" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab class="online" *ngIf="bluetoothConnected" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal()">
+      <ion-icon name="bluetooth-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab class="online" *ngIf="serialConnected" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal()">
+      <ion-icon name="terminal-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-------------------------------->
+
+</ion-content>

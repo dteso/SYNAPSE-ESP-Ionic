@@ -1,0 +1,113 @@
+<div *ngIf="terminalFormReady && serialData.connected" class="bg-seagreen">
+  <!-- When connected -->
+  <ion-row class="fade-in" style="margin-top: 3rem;">
+    <ion-col size='12' class="connected-frame">
+      <h2 class="black-shadowed-text"><strong> SERIAL CONNECTED</strong></h2>
+      <h6><strong> DEVICE PHYSICALLY CONNECTED </strong>
+      </h6>
+      <ion-icon name="mic-circle-outline" color="dark" style="font-size: 6rem;" (click)="startSpeechRecognition()">
+      </ion-icon>
+    </ion-col>
+  </ion-row>
+  <!-- Last message received-->
+  <!-- <ion-row *ngIf="(rawDataSubject | async) && lastStr" class="fade-in text-black">
+    <ion-col size='12' class="center-shadow-box">
+      <h6>Last message Received</h6>
+      <div class="lbl-h4">
+        <strong>{{ lastStr }}</strong>
+      </div>
+    </ion-col>
+  </ion-row> -->
+  <ion-row style="text-align: center; margin-top: 1rem;">
+    <ion-col style="border: solid 1px black; border-radius: 2%;">
+      <ion-icon name="settings-outline" style="font-size: 1.75rem;"></ion-icon>
+    </ion-col>
+    <ion-col (click)="clearConsole();" style="border: solid 1px black; border-radius: 2%; ">
+      <ion-icon name="trash" style="font-size: 1.75rem;"></ion-icon>
+    </ion-col>
+    <ion-col (click)="generatePdf()" style="border: solid 1px black; border-radius: 2%; ">
+      <ion-icon name="document-text" style="font-size: 1.75rem;"></ion-icon>
+    </ion-col>
+    <ion-col (click)="disconnect()" style="border: solid 1px black; border-radius: 2%; ">
+      <ion-icon name="flash-off" style="font-size: 1.75rem;"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <!-- Data sending form -->
+  <ion-row *ngIf="terminalForm">
+    <ion-col>
+      <form [formGroup]="terminalForm" (ngSubmit)="onSubmit()">
+        <ion-row>
+          <ion-col size='10'>
+            <ion-input type="text" formControlName="message" name="message" class="terminal-input"></ion-input>
+          </ion-col>
+          <ion-col size='2'>
+            <ion-button expand="block" color="success" type="submit" size='medium'>
+              <ion-icon name="arrow-redo-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-col>
+  </ion-row>
+</div>
+
+<ion-content [fullscreen]="true" class="text-black">
+  <ion-row *ngIf="!serialData.connected">
+    <ion-card class="abel mt-5">
+      <ion-card-header>
+        <ion-card-subtitle class="text-center">Not USB device detected</ion-card-subtitle>
+        <ion-card-title class="text-center txt-lightgray">Serial Connection</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="txt-black text-center">
+        <div class="text-center">
+          <ion-icon name="warning-outline" class="font-8"></ion-icon>
+        </div>
+        Connect your smartphone to external USB device. If you have already plug-in it,
+        check out connection again, or press RETRY.
+        <hr>
+        <ion-button color="dark" (click)="runSerialPort()">Connect</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-row>
+  <!-- Log -->
+  <ion-row *ngIf="rawDataSubject | async else notDataBlock" class="fade-in">
+    <ion-col size='12'>
+      <div #terminal class="overflow-scroll">
+        <ion-textarea>
+          <div *ngFor="let data of rawDataSubject | async"
+            [ngStyle]="{'background': data.type === 'RECEIVED' ? 'rgb(61, 60, 60)' : (data.type === 'SENT' ? 'orange' : null) }"
+            class="log fade-in">
+            <!-- <h1>{{data.id}}</h1> -->
+            <ion-row>
+              <ion-col>
+                <p *ngIf="data.type === messageTypes.RECEIVED else elseBlock" class="fs3px">{{data.type}}
+                  <ion-icon name="arrow-undo-outline" class="fs1rem">
+                  </ion-icon>
+                <p>
+                  <ng-template #elseBlock>
+                    <p class="fs3px">
+                      <ion-icon name="arrow-redo-outline" class="fs1rem"></ion-icon>{{data.type}}
+                    </p>
+                  </ng-template>
+              </ion-col>
+              <ion-col size='4' class="text-right">
+                {{data.timestamp | date : 'HH:mm:ss' }}"
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                {{data.content}}
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-textarea>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ng-template #notDataBlock>
+    <div *ngIf="connected" style="text-align: center; padding-top: 40%;">
+      No data received by the moment...
+    </div>
+  </ng-template>
+  <!-- MESSAGE_TRAFFIC_COUNT: {{idx}} -->
+</ion-content>

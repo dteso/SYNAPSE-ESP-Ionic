@@ -1,0 +1,84 @@
+.devices-header {
+  background: -webkit-linear-gradient(-90deg, #223240 40%, rgb(85, 96, 113) 100%);
+  margin-top: 3.5rem;
+  color: #FFFFFF;
+}
+
+
+.big {
+  font-size: 5rem;
+}
+
+
+.small {
+  font-size: 1.2rem;
+  ;
+}
+
+
+ion-content {
+  --background: -webkit-linear-gradient(-90deg, #223240 50%, gray 100%);
+}
+
+
+ion-segment {
+  --background: #223240;
+}
+
+
+.offline {
+  ion-fab-button {
+    --background: #FFFFFF;
+    --color: #223240;
+  }
+}
+
+.online {
+  ion-fab-button {
+    --background: #223240;
+    --color: #14bee0;
+  }
+}
+
+
+ion-card {
+  --background: transparent;
+}
+
+.ok-background {
+  background: -webkit-linear-gradient(0deg, transparent 70%, rgb(2, 188, 141) 100%);
+}
+
+.ko-background {
+  background: -webkit-linear-gradient(0deg, transparent 70%, rgb(233, 103, 103) 100%);
+}
+
+.quarentine-background {
+  color: rgb(251, 202, 5);
+  background: -webkit-linear-gradient(0deg, transparent 70%, rgb(250, 211, 55) 100%);
+}
+
+.maintenance-background {
+  background: -webkit-linear-gradient(0deg, transparent 70%, rgb(244, 126, 246) 100%);
+}
+
+.not-connected-background {
+  background: -webkit-linear-gradient(0deg, transparent 70%, black 100%);
+}
+
+.bypassed-background {
+  background: -webkit-linear-gradient(0deg, transparent 70%, rgb(102, 100, 100) 100%);
+  color: gray;
+}
+
+ion-spinner {
+  //transform: scale(0.3);
+  padding: 0rem !important;
+}
+
+.register-row {
+  border-bottom: solid 0.01px #535252;
+  padding: 0.2rem;
+  font-size: 1rem;
+  font-weight: lighter;
+}

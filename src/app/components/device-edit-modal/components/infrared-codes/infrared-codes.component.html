@@ -1,0 +1,34 @@
+<ion-row>
+  <ion-col size="4">
+    <h1 style="color: #223240">Infrared</h1>
+  </ion-col>
+  <ion-col style="text-align: right;">
+    <!-- <ion-button color="success" fill="outline" shape="round" (click)=" startIrReading()"
+      style="margin-top: 1rem; width: 45%;" *ngIf="(listeningIr|async) === ( null || undefined || false)"><ion-icon
+        name="add"></ion-icon>
+    </ion-button> -->
+  </ion-col>
+</ion-row>
+
+<hr>
+
+<div
+  style="text-align: center; width: 100%; background: black; border-radius: 8px; padding: 0.5rem; margin-bottom: 1rem;"
+  *ngIf="listeningIr|async">
+  <p style="color: rgb(104, 198, 146);">Emita la señal infraroja ahora</p>
+  <img width="30%" src="../../../../../assets/icons/loader-gradient.apng" />
+</div>
+<div class="mt-1">
+  <ion-row>
+    <ion-col size="4" style="text-align: end;" *ngFor="let irCode of _irCodes|async;">
+      <ion-button color="light" expand="full" shape="round" (click)="sendIrCode(irCode)">
+        <strong>{{irCode.key}}</strong>
+      </ion-button>
+    </ion-col>
+    <ion-col size="4" style="text-align: end;">
+      <ion-button color="success" expand="full" fill="outline" shape="round" (click)=" startIrReading()"
+        *ngIf="(listeningIr|async) === ( null || undefined || false)"><ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</div>

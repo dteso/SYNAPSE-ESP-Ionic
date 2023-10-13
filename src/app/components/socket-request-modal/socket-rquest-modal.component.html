@@ -1,0 +1,40 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title><strong>{{ step !== 'failed'? title : 'Timeout' | uppercase }}</strong></ion-title>
+    <ion-buttons slot="end">
+      <!-- <ion-button (click)="dismiss()">
+        <ion-icon name="close-circle" color="danger" style="font-size: 1.8rem;"></ion-icon>
+      </ion-button> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div *ngIf="step === 'requesting'" class="fade-in">
+    <h3 class="requesting"> ENVIANDO COMANDO </h3>
+    <!-- <p>{{ message }}</p> -->
+    <img src="../../../assets/icons/polyline-gradient.apng" width="80%" />
+  </div>
+
+  <div *ngIf="step === 'done'" class="fade-in">
+    <h3 class="success"> ¡HECHO! </h3>
+    <p>{{ message }}</p>
+    <img src="../../../assets/icons/dark-success.apng" width="40%" />
+  </div>
+
+  <div *ngIf="step === 'failed'" class="fade-in">
+    <h3 class="error"> ERROR </h3>
+    <p style="color: red"> Se ha esperado una respuesta durante demasiado tiempo. Comprueba que no hayas perdido
+      conexión con el
+      dispositivo</p>
+    <img src="../../../assets/icons/55-error-outline.apng" width="40%" />
+  </div>
+</ion-content>
+<ion-footer *ngIf="buttons">
+  <ion-row style="padding: 1rem;">
+    <ion-col *ngFor="let button of buttons;">
+      <ion-button [style]='getButtonStyle(button)' (click)="dismiss()" expand="full">
+        {{ button.caption }}
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

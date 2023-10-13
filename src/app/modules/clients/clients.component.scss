@@ -1,0 +1,36 @@
+.clients-header {
+    background: -webkit-linear-gradient(-90deg, #223240 40%, rgb(85, 96, 113) 100%);
+    margin-top: 3.5rem;
+    color: #FFFFFF;
+}
+
+ion-content {
+    --background: -webkit-linear-gradient(-90deg, #223240 50%, gray 100%);
+}
+
+ion-item {
+    --background: black;
+}
+
+h2 {
+    color: #FFFFFF;
+    font-weight: bolder;
+}
+
+ion-card {
+    --background: transparent;
+    color: black;
+}
+
+ion-fab-button {
+    --background: #FFFFFF;
+    --color: #223240;
+}
+
+ion-segment {
+    --background: #223240;
+}
+
+p {
+    font-size: 0.5rem;
+}

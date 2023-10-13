@@ -1,0 +1,211 @@
+<!-- eslint-disable @angular-eslint/template/no-negated-async -->
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Registrar nebulizador</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-circle" color="danger" style="font-size: 1.8rem;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div style="padding: 1rem;">
+
+    <!---------------------->
+    <!-- S T E P        1 -->
+    <!---------------------->
+
+    <!-- SELECCIÓN MEDIO CONEXIÓN -->
+    <ion-row *ngIf="isStep1() && !(bluetoothConnected | async)"
+      style="text-align: center; display: flex; padding-top: 5rem;">
+      <ion-col size="12">
+        <p style="text-align: center; color: black">
+          No se encuentra conectado a ningún dispositivo, por medio de Bluetooth, USB o Punto de Acceso. Seleccione
+          uno.
+        </p>
+      </ion-col>
+
+      <ion-col size='4' style="justify-content: center;">
+        <ion-button type="button" fill="outline" color="secondary" expand="full" shape="round"
+          [href]="['/bluetooth-terminal']">
+          <ion-icon name="bluetooth"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size='4' style="justify-content: center;">
+        <ion-button type="button" fill="outline" color="success" expand="full" shape="round"
+          [href]="['/serial-terminal']">
+          <ion-icon name="terminal-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size='4' style="justify-content: center;">
+        <ion-button type="button" fill="outline" color="tertiary" expand="full" shape="round">
+          <ion-icon name="globe"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- Formulario -->
+    <form [formGroup]="deviceForm" (ngSubmit)="nextStep()">
+      <div *ngIf="isStep1() && (bluetoothConnected | async)"
+        [ngClass]="{'fadeInRight':onForward, 'fadeInLeft':!onForward}">
+        <ion-row>
+          <ion-col style="text-align: center;" size="12">
+            <h1>
+              <ion-icon name="wifi" style="font-size: 1.5rem;"></ion-icon> WiFi
+            </h1>
+            <p> Introduce las credenciales del router del cliente </p>
+          </ion-col>
+
+          <ion-col size="12">
+            <div>
+
+              <ion-row style="margin-top: 3rem; padding-top: 0;">
+                <ion-col size="3" style="padding:0;">
+                  <ion-label>
+                    <h2> SSID </h2>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="8" style="opacity: 50%; border-bottom: solid 0.5px black;">
+                  <ion-input type="text" formControlName="ssid" placeholder=""></ion-input>
+                </ion-col>
+              </ion-row>
+
+
+              <ion-row style="margin-top: 0.5rem; padding-top: 0;">
+                <ion-col size="3" style="padding:0;">
+                  <ion-label>
+                    <h2> Password </h2>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="8" style="opacity: 50%; border-bottom: solid 0.5px black;">
+                  <ion-input type="password" formControlName="pass" placeholder=""></ion-input>
+                </ion-col>
+              </ion-row>
+
+            </div>
+            <!-- <hr>
+            <ion-row style="background: none !important;" class="mt-2">
+              <ion-checkbox></ion-checkbox>
+              <ion-label style="color: black;"> Remember parameters </ion-label>
+            </ion-row> -->
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <!----------------------------------------------------------------------------------------------------------------------------------->
+
+      <!---------------------->
+      <!-- S T E P        2 -->
+      <!---------------------->
+      <div *ngIf="isStep2()" class="fadeInRight">
+        <ion-row>
+          <ion-col style="text-align: center;" size="12">
+            <h1>
+              <ion-icon name="rose" style="font-size: 1.5rem;"></ion-icon> Nebulizador
+            </h1>
+            <p> Introduce los datos del nebulizador </p>
+          </ion-col>
+          <ion-col size="12">
+
+            <div>
+
+              <ion-row style="margin-top: 0.5rem; padding-top: 0;">
+                <ion-col size="3" style="padding:0;">
+                  <ion-label>
+                    <h2> MAC </h2>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="8" style="opacity: 50%; border-bottom: solid 0.5px black;">
+                  <ion-input type="text" formControlName="MAC" placeholder="" [value]="MAC" [disabled]="true">
+                  </ion-input>
+                </ion-col>
+              </ion-row>
+
+              <ion-row style="margin-top: 0.5rem; padding-top: 0;">
+                <ion-col size="3" style="padding:0;">
+                  <ion-label>
+                    <h2> IP Local </h2>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="8" style="opacity: 50%; border-bottom: solid 0.5px black;">
+                  <ion-input type="text" formControlName="ip" placeholder="" [value]="" [disabled]="true">
+                  </ion-input>
+                </ion-col>
+              </ion-row>
+
+              <ion-row style="margin-top: 0.5rem; padding-top: 0;">
+                <ion-col size="3" style="padding:0;">
+                  <ion-label>
+                    <h2> Cliente </h2>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="8" style="opacity: 50%; border-bottom: solid 0.5px black;">
+                  <ion-select interface="action-sheet" formControlName="customer" placeholder="Cliente">
+                    <ion-select-option *ngFor="let client of clientsOptions;" [value]="client.uid">{{client.name}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-col>
+              </ion-row>
+
+              <ion-row style="margin-top: 0.5rem; padding-top: 0;">
+                <ion-col size="3" style="padding:0;">
+                  <ion-label>
+                    <h2> Nombre </h2>
+                  </ion-label>
+                </ion-col>
+                <ion-col size="8" style="opacity: 50%; border-bottom: solid 0.5px black;">
+                  <ion-input type="text" formControlName="name" placeholder=""></ion-input>
+                </ion-col>
+              </ion-row>
+
+            </div>
+
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <!----------------------------------------------------------------------------------------------------------------------------------->
+
+      <!---------------------->
+      <!-- S T E P        3 -->
+      <!---------------------->
+      <div *ngIf="isStep3()" class="fadeInRight" style="padding-top: 20%;">
+        <ion-row>
+          <ion-col style="text-align: center;" size="12">
+            <h1>
+              ¡ REGISTRADO !
+            </h1>
+            <ion-icon name="checkmark" color="success" style="font-size: 5rem;"></ion-icon>
+            <p> Ahora puedes volver y comprobar que el dispositivo se encuentra en la lista </p>
+          </ion-col>
+        </ion-row>
+      </div>
+    </form>
+  </div>
+  <div style="padding: 2rem; color: rgb(98, 142, 205); font-size: 14px; opacity: 20%;">
+    {{lastStr}}
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <div style="padding: 2rem;">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button type="submit" *ngIf="!isStep1() && !isStep3()" expand="full" shape="round" color="danger"
+          style="width: 65%;" (click)="previousStep()">
+          VOLVER</ion-button>
+      </ion-col>
+      <ion-col size="6" style="justify-content: right; display: flex;">
+        <ion-button *ngIf="!isStep3()" type="submit" expand="full" shape="round" style="width: 65%;"
+          [disabled]="isStep1() && !(bluetoothConnected | async)" (click)="nextStep()">
+          SIGUIENTE</ion-button>
+
+        <ion-button *ngIf="isStep3()" type="submit" color="success" expand="full" shape="round" style="width: 65%;"
+          (click)="dismiss()">
+          HECHO</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-footer>

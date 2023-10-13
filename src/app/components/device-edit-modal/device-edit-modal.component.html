@@ -1,0 +1,168 @@
+<ion-header translucent>
+  <ion-toolbar>
+
+    <ion-title style="text-align: left; ">
+      <strong>{{device.name}}</strong>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss(null)">
+        <ion-icon name="close-circle" color="danger" style="font-size: 1.8rem;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <ion-row>
+    <ion-segment value="info" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="info">
+        <ion-label>INFO</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="actions">
+        <ion-label>IR</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="setup">
+        <ion-label>SETUP</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="gpio">
+        <ion-label>GPIO</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-row>
+</ion-header>
+<ion-content>
+
+  <div style="padding: 1rem; width: 100%; color: #223240;" *ngIf="showMain | async">
+    <form>
+      <ion-label>
+        NOMBRE
+      </ion-label>
+      <ion-row>
+        <ion-col [size]="device.minLevelReached!==''? 11: 12" style="border-bottom: solid 0.5px black;">
+          <ion-input type="text" [(ngModel)]="editedName" [placeholder]="device.name"
+            [disabled]="device.minLevelReached===''" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-col>
+        <ion-col size="1" *ngIf="device.minLevelReached!==''">
+          <ion-icon name="save-outline" style="font-size: 1.8rem; color: #223240;;" (click)="updateDeviceName(device)">
+          </ion-icon>
+        </ion-col>
+      </ion-row>
+      <!--
+      <ion-row>
+        <ion-col size="12" style="text-align: center; color: #FFFFFF; margin-top: 0.5rem;">
+          <ion-button color="default"
+            [ngClass]="{'ko-background':device.minLevelReached === 'YES', 'ok-background':device.minLevelReached === 'NO', 'not-connected-background':device.minLevelReached===''}"
+            style="min-height: 3rem; width: 80%;" (click)="navigateClient(device.customer?._id)">
+            <img width="30%" src="../../../assets/icons/avatar-man-gradient.apng" />
+          </ion-button>
+        </ion-col>
+        <ion-col size="12" style="text-align: center; color: #FFFFFF;">
+          {{device.customer?.name}}
+        </ion-col>
+      </ion-row> -->
+
+      <ion-row *ngIf="device.minLevelReached !== ''" style="margin-top: 1rem;"
+        [ngStyle]="{'color': device.rssi < -60 ? (device.rssi < -70 ? (device.rssi < -80 ? 'red' : 'orange') : 'rgb(244, 242, 106)'):'rgb(45, 222, 29)'}">
+        <!-- red orange yellow green -->
+        <ion-col size="6" style="text-align: left; font-size: 1.5rem">
+          <ion-icon name="wifi"></ion-icon>
+        </ion-col>
+        <ion-col size="6" style="text-align: right; font-weight: bolder; font-size: 1.2rem;">
+          <strong>RSSI: {{device.rssi}}</strong>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6" style="text-align: left; color: #223240;">
+          <strong>MAC</strong>
+        </ion-col>
+        <ion-col size="6" style="text-align: right; color:gray; ">
+          {{ device.MAC }}
+        </ion-col>
+      </ion-row>
+
+
+      <ion-row>
+        <ion-col size="6" style="text-align: left;color: #223240;">
+          <strong>IP</strong>
+        </ion-col>
+        <ion-col size="6" style="text-align: right; color:gray;">
+          {{ device.ip }}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6" style="text-align: left;color: #223240;">
+          <strong>SSID</strong>
+        </ion-col>
+        <ion-col size="6" style="text-align: right; color:gray;">
+          {{ device.ssid }}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6" style="text-align: left;color: #223240;">
+          <strong>TEMPERATURA</strong>
+        </ion-col>
+        <ion-col size="6" style="text-align: right; color:gray;">
+          {{ device.temp? device.temp:'--' }}ºC
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6" style="text-align: left;color: #223240;">
+          <strong>HUMEDAD</strong>
+        </ion-col>
+        <ion-col size="6" style="text-align: right; color:gray;">
+          {{ device.hum? device.hum:'--' }}%
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4" style="text-align: left;color: #223240;">
+          <strong>Última recarga</strong>
+        </ion-col>
+        <ion-col size="8" style="text-align: right; color:gray;">
+          {{ device.lastRefill | date:'MMMM d, y HH:mm':'GMT+1' }}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4" style="text-align: left;color: #223240;">
+          <strong>Último evento</strong>
+        </ion-col>
+        <ion-col size="8" style="text-align: right; color:gray;">
+          {{ device.lastEvent | date:'MMMM d, y HH:mm':'GMT+1' }}
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+
+  <!--------------------------------------->
+
+  <div style="padding: 1rem; width: 100%;" *ngIf="showActions | async">
+    <app-infrared-codes [device]="device" [wsResponseReceived]="wsResponseReceived"></app-infrared-codes>
+  </div>
+
+  <!--------------------------------------->
+
+  <div style="padding: 1rem; width: 100%;" *ngIf="showSetup | async">
+    <h1 style="color: #223240">Setup</h1>
+  </div>
+
+  <div style="padding: 1rem; width: 100%;" *ngIf="showGpio | async">
+    <h1 style="color: #223240">GPIO</h1>
+  </div>
+
+
+
+</ion-content>
+
+<ion-footer>
+  <div style="text-align: center; padding: 1rem;">
+    <ion-button color="danger" shape="filled" expand="full" (click)="showConfirmationModal(device)"
+      style="color: black;">
+      <ion-icon name="trash" style="margin-right: 1rem;"></ion-icon> Borrar dispositivo
+    </ion-button>
+  </div>
+</ion-footer>

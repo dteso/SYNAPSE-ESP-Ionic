@@ -1,0 +1,116 @@
+<div class="clients-header text-center">
+  <ion-row>
+    <ion-col size='12' class="connected-frame">
+      <h1 class="custom-shadowed-text">Clientes</h1>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-segment value="list" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="list">
+        <ion-label>Listado</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="cards">
+        <ion-label>Tarjetas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-row>
+</div>
+<ion-row>
+  <ion-col size="12" style="font-size: 1.2rem; background-color: #212930;">
+    <ion-input type="search" placeholder="Buscar..." [(ngModel)]="filtro" (ngModelChange)="filterCustomers()">
+      <ion-icon name="search"></ion-icon>
+    </ion-input>
+  </ion-col>
+</ion-row>
+<ion-content>
+  <!-- <div *ngIf="showAsList | async" style="padding: 0.2rem;" class="fade-in"> -->
+  <div *ngIf="showAsList | async" style="background: transparent;" class="fade-in">
+    <ion-row style="color:rgb(2, 180, 168) ; border-bottom: solid 3px #FFFFFF; padding: 0.2rem; margin-bottom: 0.2rem;">
+      <ion-col class="col" size="4" style="text-align: left;"><strong>Cliente</strong></ion-col>
+      <ion-col class="col" size="4" style="text-align: left;"><strong>Localidad</strong></ion-col>
+      <ion-col class="col" size="4" style="text-align: left;"><strong>Dirección</strong></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let client of _clients | async" class="fade-in"
+      style="border-bottom: solid 0.1px #FFFFFF; padding-top: 0.5rem; padding-bottom: 0.5rem;"
+      routerLink="/customer/{{client.uid}}" (press)="openEditionModal(client, client.uid)">
+      <ion-col class="col" size="4"
+        style="color:#FFFFFF; font-weight: bolder; border-left: 0.2rem solid darkgray; padding-left: 0.5rem; ">
+        {{client.name}}
+      </ion-col>
+      <ion-col class="col" size="4" style="text-align: left;">{{client.location |
+        ellipsis: 15}}
+      </ion-col>
+      <ion-col class="col" size="4" style="text-align: left;">
+        {{client.street | ellipsis: 15}}
+      </ion-col>
+
+    </ion-row>
+    <div *ngIf="(_clients | async) === (false || null || undefined)" style="text-align: center; padding: 3rem;">
+      No se han recibido datos por el momento
+    </div>
+  </div>
+
+
+
+  <!-- <div *ngIf="showAsCards | async" style="padding: 0.2rem;" class="fade-in"> -->
+  <div *ngIf="showAsCards | async" class="fade-in">
+    <ion-row>
+      <ion-card *ngFor="let client of _clients | async;" class="fade-in"
+        style="width: 100%; background-color:transparent" (press)="openEditionModal(client, client.uid)">
+        <ion-card-title style="padding: 0.5rem;" (click)="navigateCustomerDetail(client.uid)">
+          <ion-row>
+            <ion-col size="12" style="text-align: center; color:#FFFFFF; ">
+              <strong>{{client?.name}}</strong>
+            </ion-col>
+          </ion-row>
+        </ion-card-title>
+        <ion-card-subtitle (click)="navigateCustomerDetail(client.uid)">
+          <ion-row>
+            <ion-col size="12" style="text-align: center; color:lightgray; ">
+              <strong>({{client?.location}})</strong> {{client?.street}}
+            </ion-col>
+          </ion-row>
+        </ion-card-subtitle>
+        <ion-card-content>
+          <ion-row class="text-center">
+            <ion-col size="3">
+              <ion-button expand="full" color="default" (click)="openEditionModal(client, client.uid)">
+                <img src="../../../../assets/icons/edit-document-outline.apng" style="padding: 0.250rem;" />
+              </ion-button>
+              <p>EDITAR</p>
+            </ion-col>
+            <ion-col size="3">
+              <ion-button expand="full" color="default" (click)="presentNotAvailableModal()">
+                <img src="../../../../assets/icons/calendar-outline.apng" style="padding: 0.250rem;" />
+              </ion-button>
+              <p>CITAS</p>
+            </ion-col>
+            <ion-col size="3">
+              <ion-button expand="full" color="default">
+                <a href="mailto:{{client?.email}}">
+                  <img width="80%" src="../../../../assets/icons/email-solid.apng" />
+                </a>
+              </ion-button>
+              <p>{{client?.email}}</p>
+            </ion-col>
+            <ion-col size="3">
+              <ion-button expand="full" color="default">
+                <a href="tel:+34{{client?.telephone}}" style="color: rgb(8, 208, 141);">
+                  <img width="80%" src="../../../../assets/icons/call-phone-outline.apng" />
+                </a>
+              </ion-button>
+              <p>{{client?.telephone}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openClientModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
